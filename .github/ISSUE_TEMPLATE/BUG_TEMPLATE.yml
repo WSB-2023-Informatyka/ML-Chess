@@ -1,0 +1,21 @@
+name: "Bug Report"
+description: "Report an unexpected behaviour."
+labels:
+  - "type: bug"
+body:
+  - type: "textarea"
+    id: "description"
+    attributes:
+      label: "Description"
+      description: "Please enter a description of your issue."
+      placeholder: "Short and explicit description of your incident..."
+  - type: "dropdown"
+    id: area
+    attributes:
+      label: "Area"
+      description: "Select what area this bug is related to."
+      multiple: false
+      options:
+        - "User Interface"
+        - "Machine Learning Model"
+        - "Other"

@@ -1,0 +1,21 @@
+name: "Documentation Request"
+description: "Suggest area in documentation that needs improvement."
+labels:
+  - "type: docs"
+body:
+  - type: "textarea"
+    id: "description"
+    attributes:
+      label: "Description"
+      description: "Please enter a description."
+      placeholder: "Short and explicit description of what needs an improvement..."
+  - type: "dropdown"
+    id: area
+    attributes:
+      label: "Area"
+      description: "Select what area this bug is related to."
+      multiple: false
+      options:
+        - "User Interface"
+        - "Machine Learning Model"
+        - "Other"
