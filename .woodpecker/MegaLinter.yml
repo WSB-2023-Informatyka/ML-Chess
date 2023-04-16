@@ -1,3 +1,5 @@
+# FIXME: This is not a valid file, needs to be in Woodpecker CI format.
+
 # MegaLinter GitHub Action configuration file
 # More info at https://megalinter.io
 name: MegaLinter
