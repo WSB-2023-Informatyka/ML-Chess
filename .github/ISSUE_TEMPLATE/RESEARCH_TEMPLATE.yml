@@ -1,14 +1,14 @@
-name: "Feature Request"
-description: "Request a new feature."
+name: "Research Request"
+description: "Request a research."
 labels:
-  - "type: feature"
+  - "type: research"
 body:
   - type: "textarea"
     id: "description"
     attributes:
       label: "Description"
-      description: "Please enter a description."
-      placeholder: "Short and explicit description of feature that needs to be added..."
+      description: "Please enter a description of your issue."
+      placeholder: "Short and explicit description of your incident..."
   - type: "dropdown"
     id: area
     attributes:
