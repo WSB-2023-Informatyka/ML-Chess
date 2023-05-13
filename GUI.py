@@ -19,7 +19,7 @@ class GuidedUI:
 
 	def run(self) -> None:
 		"""
-		Start main GUI process that updates screen
+		Start main GUI process that updates screen.
 		"""
 		running = True
 		pygame.display.set_caption("ML CHESS")
