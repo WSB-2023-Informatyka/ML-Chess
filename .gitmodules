@@ -1,0 +1,3 @@
+[submodule "assets/sense-chess/artwork"]
+	path = assets/sense-chess/artwork
+	url = https://github.com/sense-chess/artwork.git
