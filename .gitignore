@@ -148,3 +148,6 @@ dmypy.json
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+# MacOS cache files
+.DS_Store
