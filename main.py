@@ -1,11 +1,11 @@
-import GUI
+import gui
 
 
 def main() -> None:
-	window_size, white, black = (700, 700), (255, 255, 255), (0, 0, 0)
-	size_of_board_square = 87
+	window_size, white, black = (640, 640), (255, 255, 255), (0, 0, 0)
+	size_of_board_square = 80
 
-	start = GUI.GuidedUI(window_size, black, white, size_of_board_square)
+	start = gui.GuidedUI(window_size, black, white, size_of_board_square)
 	start.run()
 
 

@@ -41,8 +41,6 @@ class GuidedUI:
 				if event.type == pygame.QUIT:
 					running = False
 
-			pygame.display.flip()
-
 			self.draw_chessboard(back_buffer, self.board_color, self.size_of_board_square)
 
 			screen.blit(back_buffer, (0, 0))
