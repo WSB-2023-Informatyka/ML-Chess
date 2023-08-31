@@ -1,9 +1,9 @@
+from typing import Any
 import pygame
 
-
 class Piece():
-	def __init__(self, Color, position: tuple, size: tuple) -> None:
-		self.color = Color
+	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
+		# is_black here is ignored, left for compatibility.
 		self.position = position
 		self.size = size
 
@@ -11,19 +11,18 @@ class Piece():
 		"""
 		Render the piece onto the surface.
 		"""
-		raise Exception("unimplemented")
-
-	def tranlate(self, new_position):
-		"""
-		Change the position of the piece to new position.
-		"""
+		# TODO: implement this for each piece type (not for generic piece).
 		raise Exception("unimplemented")
 
 class Pawn(Piece):
-	def __init__(self, Color, position: tuple, size: tuple) -> None:
-		super().__init__(Color, position=position, size=size)
-		with open('path/to/pawn.png') as image: # FIXME: set the correct path
-			self.image = image
+	def __init__(self, position: tuple, size: tuple, is_black: bool) -> None:
+		super().__init__(position=position, size=size)
+		# if is_black:
+		# 	with open('path/to/black/pawn.png') as image: # FIXME: set the correct path
+		# 		self.image = image
+		# else:
+		# 	with open('path/to/white/pawn.png') as image: # FIXME: set the correct path
+		# 		self.image = image
 
 class Bishop(Piece):
 	# TODO: implement this piece;
@@ -41,10 +40,24 @@ class Queen(Piece):
 	# TODO: implement this piece;
 	pass
 
-class Bishop(Piece):
-	# TODO: implement this piece;
-	pass
-
 class King(Piece):
 	# TODO: implement this piece;
 	pass
+
+class Factory:
+	"""
+	Implements factory pattern that allows to generate different pieces based only on the color and symbol of the piece.
+	https://refactoring.guru/design-patterns/factory-method
+	"""
+	def __init__(self) -> None:
+		pass
+
+	def __call__(self, symbol: str, position: tuple, size: tuple) -> Piece:
+		return {
+			'p': Pawn, 'P': Pawn,
+			'b': Bishop, 'B': Bishop,
+			'n': Knight, 'N': Knight,
+			'r': Rook, 'R': Rook,
+			'q': Queen, 'Q': Queen,
+			'k': King, 'K': King,
+		}[symbol](position=position, size=size, is_black=symbol.isupper())
