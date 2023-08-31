@@ -1,42 +1,50 @@
-class Piece():
-	def __init__(self, Color, x, y) -> None:
-		self.color = Color
-		self.coordinates = (x, y)
+import pygame
 
-	def render(self):
+
+class Piece():
+	def __init__(self, Color, position: tuple, size: tuple) -> None:
+		self.color = Color
+		self.position = position
+		self.size = size
+
+	def render(self, surface: pygame.Surface):
+		"""
+		Render the piece onto the surface.
+		"""
+		raise Exception("unimplemented")
+
+	def tranlate(self, new_position):
+		"""
+		Change the position of the piece to new position.
+		"""
 		raise Exception("unimplemented")
 
 class Pawn(Piece):
-	def __init__(self, Color, x, y) -> None:
-		super().__init__(Color, x, y)
+	def __init__(self, Color, position: tuple, size: tuple) -> None:
+		super().__init__(Color, position=position, size=size)
 		with open('path/to/pawn.png') as image: # FIXME: set the correct path
 			self.image = image
 
-	def render(self):
-		# TODO: render image
-
-		pass
-
-class King(Piece):
+class Bishop(Piece):
+	# TODO: implement this piece;
 	pass
 
-class Board():
-	def __init__(self) -> None:
-		self.Pieces = []
-		for i in range(0, 8):
-			self.Pieces.append(Pawn("black"), 0+80*i, 81)
-			self.Pieces.append(Pawn("white"), 0+80*i, 640-160+1)
+class Knight(Piece):
+	# TODO: implement this piece;
+	pass
 
-	def translate(self, field: str) -> tuple:
-		# TODO:
-		# for input do translation:
-		# 1. map row to y based on board size
-		# 2. map column to x based on board size
-		# e.g. field = "G3", board_size = (640, 640)
-		# y = 5*80+1 (5 instead of 3, because board rows are counted bottom-to-top, and coords are counted top-to-bootom)
-		# x = 6*80+1
+class Rook(Piece):
+	# TODO: implement this piece;
+	pass
 
-		x = 0
-		y = 0
+class Queen(Piece):
+	# TODO: implement this piece;
+	pass
 
-		return (x, y)
+class Bishop(Piece):
+	# TODO: implement this piece;
+	pass
+
+class King(Piece):
+	# TODO: implement this piece;
+	pass
