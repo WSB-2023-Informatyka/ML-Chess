@@ -1,13 +1,18 @@
-import GUI
+import chess
+
+import gui
 
 
 def main() -> None:
-	window_size, white, black = (700, 700), (255, 255, 255), (0, 0, 0)
-	size_of_board_square = 87
+	window_size = (640, 640)
 
-	start = GUI.GuidedUI(window_size, black, white, size_of_board_square)
+# TODO: Implement loading data from pgn file. Related to board.py > update_board(self) (line 21)
+	board = chess.Board()
+
+	print(board)
+
+	start = gui.GuidedUI(window_size, chess_engine=board)
 	start.run()
-
 
 if __name__ == "__main__":
 	main()
