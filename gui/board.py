@@ -69,4 +69,4 @@ class Board():
 					pygame.draw.rect(surface, BLACK_SQUARE_COLOR,
 									(i * rect_size[0], j * rect_size[1], rect_size[0], rect_size[1]))
 
-		# TODO: draw all pieces on surface
+		# TODO: draw all pieces on surface e.g. for piece in self.pieces: piece.render() ...
