@@ -12,7 +12,7 @@ class Board():
 	def __init__(self, board_size: tuple, chess_engine: chess.Board) -> None:
 		self.board_size = board_size
 		self.engine = chess_engine
-		self.pieces = [] # TODO: range through pieces to render them on surface. Do this in self.draw (line 72)
+		self.pieces = [] # TODO: loop through pieces to render them on surface. Do this in self.draw (line 72)
 		self.factory: Factory = Factory()
 		self.update_board()
 
