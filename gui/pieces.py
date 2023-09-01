@@ -52,6 +52,9 @@ class Factory:
 	def __init__(self) -> None:
 		pass
 
+	# e.g.
+	# factory = Factory()
+	# pawn = factory('p', (160,240), (80,80))
 	def __call__(self, symbol: str, position: tuple, size: tuple) -> Piece:
 		return {
 			'p': Pawn, 'P': Pawn,
