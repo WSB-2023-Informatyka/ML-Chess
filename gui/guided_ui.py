@@ -30,7 +30,7 @@ class GuidedUI:
 					# Stop running if pygame window closed.
 					running = False
 				elif event.type == pygame.MOUSEBUTTONDOWN:
-					print(event.pos)
+					print(f'{event.pos} translates to {self.board.translate_from_coords(event.pos)}')
 
 			# Enable if needed, to display the FPS in console.
 			# print(clock.get_fps())

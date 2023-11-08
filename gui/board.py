@@ -26,31 +26,41 @@ class Board():
 			# If the piece exists, fill it to the starting location on board.
 			if piece:
 				# Generate the piece based on the
-				self.pieces = self.factory(piece.symbol(), self.translate(square), self.get_piece_size())
+				self.pieces = self.factory(piece.symbol(), self.translate_to_coords(square), self.get_piece_size())
 
-	def translate(self, field: str | int) -> tuple:
-		# TODO:
-		# for input do translation:
-		# 1. map row to y based on board size
-		# 2. map column to x based on board size
-		# e.g. field = "G3", board_size = (640, 640)
-		# y = 5*80+1 (5 instead of 3, because board rows are counted bottom-to-top, and coords are counted top-to-bootom)
-		# x = 6*80+1
-		#
-		# support also integer based translation.
-
-		if type(field) == int:
-			# TODO: numeric translation using fields described in chess (e.g.) chess.A1
-			pass
-
-		if type(field) == str:
-			# TODO: string based translation
-			pass
-
+	def translate_to_coords(self, field: str | int) -> tuple:
+		max_x, max_y = self.board_size
+		size_x, size_y = int(max_x/8), int(max_y/8)
 		x = 0
 		y = 0
 
+		if type(field) == int:
+			field = chess.square_name(field)
+
+		if type(field) == str:
+			assert len(field)==2
+			field = field.upper()
+			row, col = field
+
+			# ASCII code for letter A is 65, so we can subtract 65 to obtain row number
+			row = ord(row)-65
+
+			# Start count from A8, so 8 have index 0.
+			col = 8-int(col)
+			x = row*size_x
+			y = col*size_y
+
 		return (x, y)
+
+	def translate_from_coords(self, field: tuple) -> str:
+		max_x, max_y = self.board_size
+		size_x, size_y = int(max_x/8), int(max_y/8)
+		x,y = field
+
+		row = chr(65 + x // size_x)
+		col = str(8 - y // size_y)
+
+		return row + col
 
 	def get_piece_size(self) -> tuple:
 		return (self.board_size[0]/8, self.board_size[1]/8)
