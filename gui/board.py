@@ -12,7 +12,7 @@ class Board():
 	def __init__(self, board_size: tuple, chess_engine: chess.Board) -> None:
 		self.board_size = board_size
 		self.engine = chess_engine
-		self.pieces = [] # TODO: loop through pieces to render them on surface. Do this in self.draw (line 72)
+		self.pieces = []
 		self.factory: Factory = Factory()
 		self.update_board()
 
@@ -81,6 +81,5 @@ class Board():
 					pygame.draw.rect(surface, BLACK_SQUARE_COLOR,
 									(i * rect_size[0], j * rect_size[1], rect_size[0], rect_size[1]))
 
-		# TODO: draw all pieces on surface e.g. for piece in self.pieces: piece.render() ...
 		for piece in self.pieces:
 			piece.render(surface)

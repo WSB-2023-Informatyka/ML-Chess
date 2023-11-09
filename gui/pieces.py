@@ -2,7 +2,7 @@ from typing import Any
 import pygame
 
 
-# Load
+# Load svg files only once, to improve performance.
 BLACK_PAWN = pygame.image.load('assets/sense-chess/artwork/pieces/pawn/bP.svg')
 BLACK_BISHOP = pygame.image.load('assets/sense-chess/artwork/pieces/bishop/bB.svg')
 BLACK_KNIGHT = pygame.image.load('assets/sense-chess/artwork/pieces/knight/bN.svg')
