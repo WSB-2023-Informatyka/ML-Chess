@@ -4,8 +4,8 @@ import chess
 from gui.pieces import Factory
 
 
-BLACK_SQUARE_COLOR = (0, 0, 0)
-WHITE_SQUARE_COLOR = (255, 255, 255)
+BLACK_SQUARE_COLOR = (139, 69, 19)
+WHITE_SQUARE_COLOR = (205, 133, 63)
 
 
 class Board():
@@ -26,7 +26,7 @@ class Board():
 			# If the piece exists, fill it to the starting location on board.
 			if piece:
 				# Generate the piece based on the
-				self.pieces = self.factory(piece.symbol(), self.translate_to_coords(square), self.get_piece_size())
+				self.pieces.append(self.factory(piece.symbol(), self.translate_to_coords(square), self.get_piece_size()))
 
 	def translate_to_coords(self, field: str | int) -> tuple:
 		max_x, max_y = self.board_size
@@ -62,6 +62,8 @@ class Board():
 
 		return row + col
 
+# TODO: współrzędne ujemne, współrzędne wykraczające poza planszę, pole wykracza poza A-H 1-8, test(XD)
+
 	def get_piece_size(self) -> tuple:
 		return (self.board_size[0]/8, self.board_size[1]/8)
 
@@ -80,3 +82,5 @@ class Board():
 									(i * rect_size[0], j * rect_size[1], rect_size[0], rect_size[1]))
 
 		# TODO: draw all pieces on surface e.g. for piece in self.pieces: piece.render() ...
+		for piece in self.pieces:
+			piece.render(surface)

@@ -30,6 +30,20 @@ def test_Board_translate_to_coords():
 	coords = b.translate_to_coords(chess.H1)
 	assert (560, 560) == coords
 
+	# Rainy-day scenarios:
+
+	coords = b.translate_to_coords('G1')
+	assert (560, 560) == coords
+
+	coords = b.translate_to_coords('G9')
+	assert (560, 560) == coords
+
+	coords = b.translate_to_coords('G0')
+	assert (560, 560) == coords
+
+	coords = b.translate_to_coords(256)
+	assert (560, 560) == coords
+
 def test_Board_translate_from_coords():
 	b = Board(board_size=(640, 640), chess_engine=chess.Board())
 
@@ -51,3 +65,9 @@ def test_Board_translate_from_coords():
 	field = b.translate_from_coords((560, 639))
 	assert 'H1' == field
 
+	# Rainy-day scenarios:
+	field = b.translate_from_coords((-1, 0))
+	assert 'H1' == field
+
+	field = b.translate_from_coords((678, 639))
+	assert 'H1' == field
