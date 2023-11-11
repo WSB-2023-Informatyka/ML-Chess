@@ -1,6 +1,22 @@
 from typing import Any
 import pygame
 
+
+# Load svg files only once, to improve performance.
+BLACK_PAWN = pygame.image.load('assets/sense-chess/artwork/pieces/pawn/bP.svg')
+BLACK_BISHOP = pygame.image.load('assets/sense-chess/artwork/pieces/bishop/bB.svg')
+BLACK_KNIGHT = pygame.image.load('assets/sense-chess/artwork/pieces/knight/bN.svg')
+BLACK_ROOK = pygame.image.load('assets/sense-chess/artwork/pieces/rook/bR.svg')
+BLACK_QUEEN = pygame.image.load('assets/sense-chess/artwork/pieces/queen/bQ.svg')
+BLACK_KING = pygame.image.load('assets/sense-chess/artwork/pieces/king/bK.svg')
+WHITE_PAWN = pygame.image.load('assets/sense-chess/artwork/pieces/pawn/wP.svg')
+WHITE_BISHOP = pygame.image.load('assets/sense-chess/artwork/pieces/bishop/wB.svg')
+WHITE_KNIGHT = pygame.image.load('assets/sense-chess/artwork/pieces/knight/wN.svg')
+WHITE_ROOK = pygame.image.load('assets/sense-chess/artwork/pieces/rook/wR.svg')
+WHITE_QUEEN = pygame.image.load('assets/sense-chess/artwork/pieces/queen/wQ.svg')
+WHITE_KING = pygame.image.load('assets/sense-chess/artwork/pieces/king/wK.svg')
+
+
 class Piece():
 	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
 		# is_black here is ignored, left for compatibility.
@@ -11,38 +27,79 @@ class Piece():
 		"""
 		Render the piece onto the surface.
 		"""
-		# TODO: implement this for each piece type (not for generic piece).
 		raise Exception("unimplemented")
 
 class Pawn(Piece):
 	def __init__(self, position: tuple, size: tuple, is_black: bool) -> None:
-		super().__init__(position=position, size=size)
-		# if is_black:
-		# 	with open('path/to/black/pawn.png') as image: # FIXME: set the correct path
-		# 		self.image = image
-		# else:
-		# 	with open('path/to/white/pawn.png') as image: # FIXME: set the correct path
-		# 		self.image = image
+		super().__init__(position=position, size=size, is_black=is_black)
+		if is_black:
+			self.image = BLACK_PAWN
+		else:
+			self.image = WHITE_PAWN
+		self.image = pygame.transform.scale(self.image, self.size)
+
+	def render(self, surface: pygame.Surface):
+		surface.blit(self.image, self.position)
 
 class Bishop(Piece):
-	# TODO: implement this piece;
-	pass
+	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
+		super().__init__(position=position, size=size, is_black=is_black)
+		if is_black:
+			self.image = BLACK_BISHOP
+		else:
+			self.image = WHITE_BISHOP
+		self.image = pygame.transform.scale(self.image, self.size)
+
+	def render(self, surface: pygame.Surface):
+		surface.blit(self.image, self.position)
 
 class Knight(Piece):
-	# TODO: implement this piece;
-	pass
+	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
+		super().__init__(position=position, size=size, is_black=is_black)
+		if is_black:
+			self.image = BLACK_KNIGHT
+		else:
+			self.image = WHITE_KNIGHT
+		self.image = pygame.transform.scale(self.image, self.size)
+
+	def render(self, surface: pygame.Surface):
+		surface.blit(self.image, self.position)
 
 class Rook(Piece):
-	# TODO: implement this piece;
-	pass
+	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
+		super().__init__(position=position, size=size, is_black=is_black)
+		if is_black:
+			self.image = BLACK_ROOK
+		else:
+			self.image = WHITE_ROOK
+		self.image = pygame.transform.scale(self.image, self.size)
+
+	def render(self, surface: pygame.Surface):
+		surface.blit(self.image, self.position)
 
 class Queen(Piece):
-	# TODO: implement this piece;
-	pass
+	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
+		super().__init__(position=position, size=size, is_black=is_black)
+		if is_black:
+			self.image = BLACK_QUEEN
+		else:
+			self.image = WHITE_QUEEN
+		self.image = pygame.transform.scale(self.image, self.size)
+
+	def render(self, surface: pygame.Surface):
+		surface.blit(self.image, self.position)
 
 class King(Piece):
-	# TODO: implement this piece;
-	pass
+	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
+		super().__init__(position=position, size=size, is_black=is_black)
+		if is_black:
+			self.image = BLACK_KING
+		else:
+			self.image = WHITE_QUEEN
+		self.image = pygame.transform.scale(self.image, self.size)
+
+	def render(self, surface: pygame.Surface):
+		surface.blit(self.image, self.position)
 
 class Factory:
 	"""
@@ -52,9 +109,6 @@ class Factory:
 	def __init__(self) -> None:
 		pass
 
-	# e.g.
-	# factory = Factory()
-	# pawn = factory('p', (160,240), (80,80))
 	def __call__(self, symbol: str, position: tuple, size: tuple) -> Piece:
 		return {
 			'p': Pawn, 'P': Pawn,

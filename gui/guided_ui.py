@@ -9,12 +9,28 @@ class GuidedUI:
 		self.board = Board(board_size=window_size, chess_engine=chess_engine)
 		self.window_size = window_size
 
+	def handle_event(self) -> bool:
+		"""
+		Handling event and return True if a move is recorded, otherwise return False.
+		"""
+		change = False
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				# Stop running if pygame window closed.
+				self.running = False
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				change = True
+				print(f'{event.pos} translates to {self.board.translate_from_coords(event.pos)}')
+				# TODO: first click, second click
+				# TODO: Check if the move is legal, if not then write log to console
+
+		return change
 
 	def run(self) -> None:
 		"""
 		Start main GUI process that updates screen
 		"""
-		running = True
+		self.running = True
 
 		pygame.display.set_caption("ML CHESS")
 		pygame.init()
@@ -24,26 +40,26 @@ class GuidedUI:
 		# Create clock to calculate the FPS.
 		clock = pygame.time.Clock()
 
-		while running:
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					# Stop running if pygame window closed.
-					running = False
-				elif event.type == pygame.MOUSEBUTTONDOWN:
-					print(event.pos)
+		first_frame = True
 
-			# Enable if needed, to display the FPS in console.
-			# print(clock.get_fps())
+		while self.running:
+			# Check if move was done, if yes, then render the new board state.
+			if self.handle_event() or first_frame:
+				if first_frame:
+					first_frame = False
 
-			# Fill the surface with new contents.
-			self.board.draw(surface)
+				# Enable if needed, to display the FPS in console.
+				# print(clock.get_fps())
 
-			# Draw the surface to buffer.
-			screen.blit(surface, (0, 0))
-			# And update the screen with contents of buffer.
-			pygame.display.update()
+				# Fill the surface with new contents.
+				self.board.draw(surface)
 
-			# Lock the FPS to 60.
+				# Draw the surface to buffer.
+				screen.blit(surface, (0, 0))
+				# And update the screen with contents of buffer.
+				pygame.display.update()
+
+				# Lock the FPS to 60.
 			clock.tick(60)
 
 		pygame.quit()
