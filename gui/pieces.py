@@ -1,19 +1,25 @@
 from typing import Any
-import pygame
 
+import pygame
 
 # Load svg files only once, to improve performance.
 BLACK_PAWN = pygame.image.load('assets/sense-chess/artwork/pieces/pawn/bP.svg')
-BLACK_BISHOP = pygame.image.load('assets/sense-chess/artwork/pieces/bishop/bB.svg')
-BLACK_KNIGHT = pygame.image.load('assets/sense-chess/artwork/pieces/knight/bN.svg')
+BLACK_BISHOP = pygame.image.load(
+	'assets/sense-chess/artwork/pieces/bishop/bB.svg')
+BLACK_KNIGHT = pygame.image.load(
+	'assets/sense-chess/artwork/pieces/knight/bN.svg')
 BLACK_ROOK = pygame.image.load('assets/sense-chess/artwork/pieces/rook/bR.svg')
-BLACK_QUEEN = pygame.image.load('assets/sense-chess/artwork/pieces/queen/bQ.svg')
+BLACK_QUEEN = pygame.image.load(
+	'assets/sense-chess/artwork/pieces/queen/bQ.svg')
 BLACK_KING = pygame.image.load('assets/sense-chess/artwork/pieces/king/bK.svg')
 WHITE_PAWN = pygame.image.load('assets/sense-chess/artwork/pieces/pawn/wP.svg')
-WHITE_BISHOP = pygame.image.load('assets/sense-chess/artwork/pieces/bishop/wB.svg')
-WHITE_KNIGHT = pygame.image.load('assets/sense-chess/artwork/pieces/knight/wN.svg')
+WHITE_BISHOP = pygame.image.load(
+	'assets/sense-chess/artwork/pieces/bishop/wB.svg')
+WHITE_KNIGHT = pygame.image.load(
+	'assets/sense-chess/artwork/pieces/knight/wN.svg')
 WHITE_ROOK = pygame.image.load('assets/sense-chess/artwork/pieces/rook/wR.svg')
-WHITE_QUEEN = pygame.image.load('assets/sense-chess/artwork/pieces/queen/wQ.svg')
+WHITE_QUEEN = pygame.image.load(
+	'assets/sense-chess/artwork/pieces/queen/wQ.svg')
 WHITE_KING = pygame.image.load('assets/sense-chess/artwork/pieces/king/wK.svg')
 
 
@@ -29,6 +35,7 @@ class Piece():
 		"""
 		raise Exception("unimplemented")
 
+
 class Pawn(Piece):
 	def __init__(self, position: tuple, size: tuple, is_black: bool) -> None:
 		super().__init__(position=position, size=size, is_black=is_black)
@@ -40,6 +47,7 @@ class Pawn(Piece):
 
 	def render(self, surface: pygame.Surface):
 		surface.blit(self.image, self.position)
+
 
 class Bishop(Piece):
 	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
@@ -53,6 +61,7 @@ class Bishop(Piece):
 	def render(self, surface: pygame.Surface):
 		surface.blit(self.image, self.position)
 
+
 class Knight(Piece):
 	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
 		super().__init__(position=position, size=size, is_black=is_black)
@@ -64,6 +73,7 @@ class Knight(Piece):
 
 	def render(self, surface: pygame.Surface):
 		surface.blit(self.image, self.position)
+
 
 class Rook(Piece):
 	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
@@ -77,6 +87,7 @@ class Rook(Piece):
 	def render(self, surface: pygame.Surface):
 		surface.blit(self.image, self.position)
 
+
 class Queen(Piece):
 	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
 		super().__init__(position=position, size=size, is_black=is_black)
@@ -88,6 +99,7 @@ class Queen(Piece):
 
 	def render(self, surface: pygame.Surface):
 		surface.blit(self.image, self.position)
+
 
 class King(Piece):
 	def __init__(self, position: tuple, size: tuple, is_black: bool = False) -> None:
@@ -101,11 +113,13 @@ class King(Piece):
 	def render(self, surface: pygame.Surface):
 		surface.blit(self.image, self.position)
 
+
 class Factory:
 	"""
 	Implements factory pattern that allows to generate different pieces based only on the color and symbol of the piece.
 	https://refactoring.guru/design-patterns/factory-method
 	"""
+
 	def __init__(self) -> None:
 		pass
 
