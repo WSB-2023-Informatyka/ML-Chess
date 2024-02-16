@@ -1,9 +1,11 @@
-import chess
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning, module="pkg_resources") # mute that warning in tests
 
+import chess
 
 from gui import Board
+
+warnings.filterwarnings("ignore", category=DeprecationWarning,
+                        module="pkg_resources")  # mute that warning in tests
 
 
 def test_Board_translate_to_coords():
@@ -43,6 +45,7 @@ def test_Board_translate_to_coords():
 
 	coords = b.translate_to_coords(256)
 	assert (560, 560) == coords
+
 
 def test_Board_translate_from_coords():
 	b = Board(board_size=(640, 640), chess_engine=chess.Board())
