@@ -210,6 +210,7 @@ class AI:
 
 
 
+
 def csv_stockfish_into_input_data2(csv_stockfish_path, dataset_path):
 	i = 0
 	temp_str = ''
