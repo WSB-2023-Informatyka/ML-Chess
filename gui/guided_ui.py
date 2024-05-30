@@ -1,5 +1,6 @@
 from enum import StrEnum, auto
 from typing import Optional
+import numpy as np
 
 import chess
 import pygame
@@ -15,6 +16,8 @@ class State(StrEnum):
 
 
 class GuidedUI:
+
+
 	def __init__(self, window_size: tuple, chess_engine: chess.Board, simulation=None):
 		self.board = Board(board_size=window_size, chess_engine=chess_engine)
 		self.window_size = window_size
@@ -28,6 +31,10 @@ class GuidedUI:
 		self.selected_figure_position: Optional[str] = None
 		self.move: Optional[chess.Move] = None
 		self.state = State.OK
+
+
+
+
 
 	def handle_event(self) -> bool:
 		"""
@@ -136,7 +143,7 @@ class GuidedUI:
 				# And update the screen with contents of buffer.
 				pygame.display.update()
 
-				# Lock the FPS to 60.
+			# Lock the FPS to 60.
 			clock.tick(60)
 
 		pygame.quit()

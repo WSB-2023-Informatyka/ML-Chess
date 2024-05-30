@@ -202,7 +202,8 @@ class AI:
 
 		return new_board
 
-csv_stockfish_into_input_data(PATH_TO_STOCKFISH_DATA, READY_DATASET, True)
+# csv_stockfish_into_input_data(PATH_TO_STOCKFISH_DATA, READY_DATASET, True)
+
 
 
 
