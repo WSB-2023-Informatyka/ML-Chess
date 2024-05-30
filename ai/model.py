@@ -1,7 +1,7 @@
-
+import keras.models
 import numpy as np
 import tensorflow as tf
-import keras.models
+
 # print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 
@@ -11,11 +11,11 @@ X, y = [], []
 #
 # conda create --prefix D:\ML WSB Chess\ML-Chess\ai\conda python=3.10
 # Open the CSV file
-with open('D:\\ML WSB Chess\\ML-Chess\\datasets\\dataset.csv', 'r') as f:
+with open("D:\\ML WSB Chess\\ML-Chess\\datasets\\dataset.csv", "r") as f:
     # Loop through each chunk of data
     for i in range(0, int(13e9 / chunksize)):
         # Read a chunk of data from the CSV file
-        data = np.loadtxt(f, dtype=np.float64, delimiter=' ', max_rows=chunksize)
+        data = np.loadtxt(f, dtype=np.float64, delimiter=" ", max_rows=chunksize)
 
         if data.size == 0:
             continue
@@ -54,16 +54,16 @@ X = X.reshape((-1, 768, 1))
 # Define the architecture of the CNN model
 model = tf.keras.Sequential()
 model.add(tf.keras.layers.Reshape((768, 1), input_shape=(1, 768)))
-model.add(tf.keras.layers.Conv1D(32, 3, activation='relu'))
+model.add(tf.keras.layers.Conv1D(32, 3, activation="relu"))
 model.add(tf.keras.layers.MaxPooling1D(2))
-model.add(tf.keras.layers.Conv1D(64, 3, activation='relu'))
+model.add(tf.keras.layers.Conv1D(64, 3, activation="relu"))
 model.add(tf.keras.layers.MaxPooling1D(2))
 model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(64, activation='relu'))
+model.add(tf.keras.layers.Dense(64, activation="relu"))
 model.add(tf.keras.layers.Dense(1))
 
 # Compile the model
-model.compile(optimizer='adam', loss='mean_squared_error')
+model.compile(optimizer="adam", loss="mean_squared_error")
 
 # Print the shapes of X and y
 for i, (x, y_val) in enumerate(zip(X, y)):
@@ -76,6 +76,6 @@ else:
     print("Error: X is an empty array")
 
 # Save the model to a file
-tf.saved_model.save(model, 'first_model_on_13gb_database')
-np.save('X_mean.npy', X_mean)
-np.save('X_std.npy', X_std)
+tf.saved_model.save(model, "first_model_on_13gb_database")
+np.save("X_mean.npy", X_mean)
+np.save("X_std.npy", X_std)
