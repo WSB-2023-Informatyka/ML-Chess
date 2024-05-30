@@ -1,8 +1,7 @@
-from enum import StrEnum, auto
+from enum import StrEnum
 from typing import Optional
 
 import chess
-import numpy as np
 import pygame
 from pygame.font import Font
 

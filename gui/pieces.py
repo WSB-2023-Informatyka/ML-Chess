@@ -101,7 +101,7 @@ class King(Piece):
         if is_black:
             self.image = BLACK_KING
         else:
-            self.image = WHITE_QUEEN
+            self.image = WHITE_KING
         self.image = pygame.transform.scale(self.image, self.size)
 
     def render(self, surface: pygame.Surface):
