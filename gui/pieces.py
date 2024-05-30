@@ -3,24 +3,24 @@ from typing import Any
 import pygame
 
 # Load svg files only once, to improve performance.
-BLACK_PAWN = pygame.image.load('assets/sense-chess/artwork/pieces/pawn/bP.svg')
+BLACK_PAWN = pygame.image.load('assets/sense-chess-converted/pieces/bP.png')
 BLACK_BISHOP = pygame.image.load(
-	'assets/sense-chess/artwork/pieces/bishop/bB.svg')
+	'assets/sense-chess-converted/pieces/bB.png')
 BLACK_KNIGHT = pygame.image.load(
-	'assets/sense-chess/artwork/pieces/knight/bN.svg')
-BLACK_ROOK = pygame.image.load('assets/sense-chess/artwork/pieces/rook/bR.svg')
+	'assets/sense-chess-converted/pieces/bN.png')
+BLACK_ROOK = pygame.image.load('assets/sense-chess-converted/pieces/bR.png')
 BLACK_QUEEN = pygame.image.load(
-	'assets/sense-chess/artwork/pieces/queen/bQ.svg')
-BLACK_KING = pygame.image.load('assets/sense-chess/artwork/pieces/king/bK.svg')
-WHITE_PAWN = pygame.image.load('assets/sense-chess/artwork/pieces/pawn/wP.svg')
+	'assets/sense-chess-converted/pieces/bQ.png')
+BLACK_KING = pygame.image.load('assets/sense-chess-converted/pieces/bK.png')
+WHITE_PAWN = pygame.image.load('assets/sense-chess-converted/pieces/wP.png')
 WHITE_BISHOP = pygame.image.load(
-	'assets/sense-chess/artwork/pieces/bishop/wB.svg')
+	'assets/sense-chess-converted/pieces/wB.png')
 WHITE_KNIGHT = pygame.image.load(
-	'assets/sense-chess/artwork/pieces/knight/wN.svg')
-WHITE_ROOK = pygame.image.load('assets/sense-chess/artwork/pieces/rook/wR.svg')
+	'assets/sense-chess-converted/pieces/wN.png')
+WHITE_ROOK = pygame.image.load('assets/sense-chess-converted/pieces/wR.png')
 WHITE_QUEEN = pygame.image.load(
-	'assets/sense-chess/artwork/pieces/queen/wQ.svg')
-WHITE_KING = pygame.image.load('assets/sense-chess/artwork/pieces/king/wK.svg')
+	'assets/sense-chess-converted/pieces/wQ.png')
+WHITE_KING = pygame.image.load('assets/sense-chess-converted/pieces/wK.png')
 
 
 class Piece():
