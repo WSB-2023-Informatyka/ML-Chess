@@ -12,16 +12,16 @@ def main() -> None:
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--pgn', type=str, help='Path to the PGN file')
 	parser.add_argument('--simulation_ticks', type=int,
-	                    default=20, help='Ticks between simulation steps')
+						default=20, help='Ticks between simulation steps')
 	parser.add_argument('--simulate', action='store_true',
-	                    help='Run game simulation')
+						help='Run game simulation')
 	parser.add_argument('--ai', action='store_true',
-	                    help='Run single player game against AI')
+						help='Run single player game against AI')
 	args = parser.parse_args()
 
-	if args.ai and args.simulate:
-		print("Can't run simulation and AI at the same time!")
-		exit(1)
+	# if args.ai and args.simulate:
+	# 	print("Can't run simulation and AI at the same time!")
+	# 	exit(1)
 
 	ai = None
 	if args.ai:
