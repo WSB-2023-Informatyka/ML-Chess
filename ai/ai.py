@@ -7,7 +7,7 @@ import pandas as pd
 PATH_TO_STOCKFISH_DATA = r"D:\ML WSB Chess\ML-Chess\fen_to_stockfish_evaluation.csv"
 READY_DATASET = r"D:\ML WSB Chess\ML-Chess\datasets\dataset.csv"
 
-piece_to_vector = {
+PIECE_TO_VECTOR = {
     "P": [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     "N": [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     "B": [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -52,7 +52,7 @@ def fen_to_onehot(fen):
             else:
                 if j < 8:
                     # Get the one-hot vector for the piece
-                    piece_vector = piece_to_vector[char]
+                    piece_vector = PIECE_TO_VECTOR[char]
                     # Set the corresponding values in the one-hot array
                     board[i, j, :] = piece_vector
     # print(board)
@@ -153,17 +153,70 @@ def fen_matrix_into_one_row2(matrix):
 
 
 class AI:
-    def __init__(self) -> None:
-        # TODO: load model while creating the app
-        for x in self.add_attack_info(fen):
-            print(x, "\n")
+    def __init__(self, depth) -> None:
+        self.depth = depth  # depth = how deep should Min_max
 
-        pass
+    # TODO: load model while creating the app
+    # for x in self.add_attack_info(fen):
+    # 	print(x, "\n")
 
-    def move(self, board: str) -> chess.Move:
-        print(board)
-        # TODO: based on board representation, predict next move and return it
-        raise Exception("unimplemented")
+    def move(self, board: chess.Board) -> chess.Move:
+        # Czyli, tutaj wchodzi szachownica w aktualnym stanie, a ma wyjść Jeden dobry ruch. Napierw zwróć jakikolwiek ruch # DONE
+        # Potem zwróć ruch ale jako jedna opcja z min maxa
+        # Potem wszystkie opcje z min maxa przepuśc przez sieć
+        best_score = float('-inf')
+        best_move = None
+
+        for move in board.legal_moves:
+            new_board = board.copy()
+            new_board.push(move)
+            score = self.minimax(new_board, False, self.depth - 1)
+            print(score)
+            if score > best_score:
+                best_score = score
+                best_move = move
+        return best_move
+
+    def minimax(self, board, is_maximizing_player, depth):
+        if depth == 0 or board.is_game_over():
+            return self.evaluate(board)
+
+        if is_maximizing_player:
+            max_eval = float('-inf')
+            for move in board.legal_moves:
+                board.push(move)
+                eval = self.minimax(board, False, depth - 1)
+                board.pop()  # undo the move
+                max_eval = max(max_eval, eval)
+                print(max_eval)
+            return max_eval
+        else:
+            min_eval = float('inf')
+            for move in board.legal_moves:
+                board.push(move)
+                eval = self.minimax(board, True, depth - 1)
+                board.pop()  # undo the move
+                min_eval = min(min_eval, eval)
+                print(min_eval)
+
+            return min_eval
+
+    def evaluate(self, board):
+        return self.material_balance(board)
+
+# https://github.com/niklasf/python-chess/discussions/864
+    def material_balance(self,board):
+        white = board.occupied_co[chess.WHITE]
+        black = board.occupied_co[chess.BLACK]
+        return (
+            chess.popcount(white & board.pawns) - chess.popcount(black & board.pawns) +
+            3 * (chess.popcount(white & board.knights) - chess.popcount(black & board.knights)) +
+            3 * (chess.popcount(white & board.bishops) - chess.popcount(black & board.bishops)) +
+            5 * (chess.popcount(white & board.rooks) - chess.popcount(black & board.rooks)) +
+            9 * (chess.popcount(white & board.queens) - chess.popcount(black & board.queens))
+        )
+
+
 
     def add_attack_info(self, fen_str):
         # Convert the FEN string to a one-hot encoded array
@@ -279,3 +332,8 @@ def csv_stockfish_into_input_data2(csv_stockfish_path, dataset_path):
             with open(dataset_path, "a") as output:
                 # print(len(fen_in_oned_matrix))
                 np.savetxt(output, [fen_in_oned_matrix], fmt="%f", delimiter=" ")
+
+chesboard_in_default_state = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+chessboard_in_dangerous_state = chess.Board("rnbqkbnr/pppppppp/8/8/4p3/8/PPPP1PPP/RNBQKBNR w KQkq")
+ai = AI(2)
+ai.move(chessboard_in_dangerous_state)
