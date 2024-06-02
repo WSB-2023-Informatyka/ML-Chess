@@ -52,21 +52,21 @@ class AI:
     # 	print(x, "\n")
 
     def move(self, board: chess.Board) -> chess.Move:
-        best_score = float('-inf')
+        best_score = float('+inf')
         best_moves = []  # Store best moves
 
         for move in board.legal_moves:
             new_board = board.copy()
             new_board.push(move)
             score = self.minimax(new_board, False, self.depth - 1)
-            if score > best_score:
+            if score < best_score:
                 best_score = score
                 best_moves = [move]  # Reset with the new best move
-            if score == best_score:  # Note: this is now an "if" clause, not "elif"
+            if score == best_score:
                 best_moves.append(move)  # Add the move
 
-            nn = neural_network()
-            best_move = nn.give_me_predictions(best_moves,board)
+        nn = neural_network()
+        best_move = nn.give_me_predictions(best_moves,board)
 
             # best_move = random.choice(best_moves) # Randomly select one of the best moves
 
@@ -106,7 +106,8 @@ class AI:
             3 * (chess.popcount(white & board.knights) - chess.popcount(black & board.knights)) +
             3 * (chess.popcount(white & board.bishops) - chess.popcount(black & board.bishops)) +
             5 * (chess.popcount(white & board.rooks) - chess.popcount(black & board.rooks)) +
-            9 * (chess.popcount(white & board.queens) - chess.popcount(black & board.queens))
+            9 * (chess.popcount(white & board.queens) - chess.popcount(black & board.queens)) # There might be an
+            # issue with calculatiing queen value
         )
 
     def fen_to_onehot(self,fen):
