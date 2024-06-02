@@ -102,9 +102,12 @@ class GuidedUI:
                         force_render = True
 
             if ai:
+                print(f"if called{self.players_turn}")
                 while not self.players_turn:
                     try:
-                        move = ai.move(str(self.board.engine))
+                        print("guided_ui:asd")
+                        move = ai.move(self.board.engine)  # str(self.board.engine) into self.board.engine
+                        print(move)
                         self.board.move_piece(move=move)
                         self.players_turn = True
                         force_render = True

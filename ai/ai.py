@@ -1,6 +1,7 @@
 import chess
 import numpy as np
-import pandas as pd
+import random
+
 
 # import tensorflow as tf
 
@@ -155,28 +156,34 @@ def fen_matrix_into_one_row2(matrix):
 class AI:
     def __init__(self, depth) -> None:
         self.depth = depth  # depth = how deep should Min_max
+        print("class AI called")
 
     # TODO: load model while creating the app
     # for x in self.add_attack_info(fen):
     # 	print(x, "\n")
 
     def move(self, board: chess.Board) -> chess.Move:
-        # Czyli, tutaj wchodzi szachownica w aktualnym stanie, a ma wyjść Jeden dobry ruch. Napierw zwróć jakikolwiek ruch # DONE
-        # Potem zwróć ruch ale jako jedna opcja z min maxa
-        # Potem wszystkie opcje z min maxa przepuśc przez sieć
+        print("move called")
         best_score = float('-inf')
-        best_move = None
+        best_moves = []  # Store best moves
 
         for move in board.legal_moves:
             new_board = board.copy()
             new_board.push(move)
             score = self.minimax(new_board, False, self.depth - 1)
-            print(score)
             if score > best_score:
                 best_score = score
-                best_move = move
-        return best_move
+                best_moves = [move]  # Reset with the new best move
+            elif score == best_score:
+                best_moves.append(move)  # Add the move
 
+        # Randomly select one of the best moves
+        best_move = random.choice(best_moves)
+
+        print(f"{best_move}")
+        print(type(best_move))
+
+        return best_move
     def minimax(self, board, is_maximizing_player, depth):
         if depth == 0 or board.is_game_over():
             return self.evaluate(board)
@@ -188,7 +195,7 @@ class AI:
                 eval = self.minimax(board, False, depth - 1)
                 board.pop()  # undo the move
                 max_eval = max(max_eval, eval)
-                print(max_eval)
+                # print(f"max_eval{max_eval}")
             return max_eval
         else:
             min_eval = float('inf')
@@ -197,7 +204,7 @@ class AI:
                 eval = self.minimax(board, True, depth - 1)
                 board.pop()  # undo the move
                 min_eval = min(min_eval, eval)
-                print(min_eval)
+                # print(f"max_eval{min_eval}")
 
             return min_eval
 
@@ -333,7 +340,7 @@ def csv_stockfish_into_input_data2(csv_stockfish_path, dataset_path):
                 # print(len(fen_in_oned_matrix))
                 np.savetxt(output, [fen_in_oned_matrix], fmt="%f", delimiter=" ")
 
-chesboard_in_default_state = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-chessboard_in_dangerous_state = chess.Board("rnbqkbnr/pppppppp/8/8/4p3/8/PPPP1PPP/RNBQKBNR w KQkq")
-ai = AI(2)
-ai.move(chessboard_in_dangerous_state)
+# chesboard_in_default_state = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+# chessboard_in_dangerous_state = chess.Board("rnbqkbnr/pppppppp/8/8/4p3/8/PPPP1PPP/RNBQKBNR w KQkq")
+# ai = AI(2)
+# ai.move(chessboard_in_dangerous_state)
