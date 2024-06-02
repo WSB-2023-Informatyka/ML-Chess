@@ -36,10 +36,7 @@ pytz==2024.1
 requests==2.32.3
 rich==13.7.1
 six==1.16.0
-tensorboard==2.16.2
-tensorboard-data-server==0.7.2
-tensorflow==2.16.1
-tensorflow-io-gcs-filesystem==0.37.0
+tensorflow==2.10
 termcolor==2.4.0
 tomli==2.0.1
 typing_extensions==4.12.0
