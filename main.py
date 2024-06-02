@@ -29,7 +29,7 @@ def main() -> None:
 
     ai = None
     if args.ai:
-        ai = AI(3)
+        ai = AI(4)
 
 
     window_size = (640, 640)
