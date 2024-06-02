@@ -1,7 +1,7 @@
 import chess
 import numpy as np
 import random
-
+from ai.use_model import neural_network
 
 # import tensorflow as tf
 
@@ -32,121 +32,11 @@ fen_for_testing = [
 ]
 
 
-def fen_to_onehot(fen):
-    print(f"FEN TO BE ONEHOTED:{fen}")
-
-    # Initialize an empty 8x8x12 array
-    board = np.zeros((8, 8, 12))
-
-    # Parse the FEN string
-    rows = fen.split("/")
-
-    # Iterate over the rows
-    for i in range(min(8, len(rows))):  # Only iterate over the first 8 rows
-        row = rows[i]
-
-        for j, char in enumerate(row):
-            # If its a digit its empty
-            if char.isdigit():
-                # Go to empty squares
-                j += int(char) - 1
-            else:
-                if j < 8:
-                    # Get the one-hot vector for the piece
-                    piece_vector = PIECE_TO_VECTOR[char]
-                    # Set the corresponding values in the one-hot array
-                    board[i, j, :] = piece_vector
-    # print(board)
-    return board
-
-
-def csv_stockfish_into_input_data(
-    csv_stockfish_path, dataset_path, additional_features_enabled
-):
-
-    if additional_features_enabled:
-        pass
-    i = 0
-    temp_str = ""
-    stockfish_eval = [""]
-    with open(csv_stockfish_path, "r") as file:
-        for line in file:
-            temp_str = line.strip() + " "  # clean useless symbols
-            temp_str = temp_str.split(
-                " "
-            )  # split fen string from additional castling/pawn move data.
-
-            temp_str, color, castle, stockfish_eval[0] = (
-                fen_to_onehot(temp_str[0]),
-                temp_str[1],
-                temp_str[2],
-                temp_str[6],
-            )
-            stockfish_eval = float(stockfish_eval[0])
-
-            fen_in_oned_matrix = fen_matrix_into_one_row(temp_str)
-            x = fen_in_oned_matrix
-            x = x.astype("float32")
-            # print(type(x[0]))
-            # print(x[0])
-            # print(len(x))
-
-            # Change into numpy array so it can be concatenated
-            stockfish_eval = np.array([stockfish_eval])
-
-            # Add a new axis to stockfish_eval to make it a 2D array
-            stockfish_eval = stockfish_eval[:, np.newaxis]
-
-            # Convert fen_in_oned_matrix to a 2D array
-            fen_in_oned_matrix = fen_in_oned_matrix[np.newaxis, :]
-
-            # Concatenate stockfish_eval with fen_in_oned_matrix
-            x = np.concatenate((fen_in_oned_matrix, stockfish_eval), axis=1)
-            x = x.reshape(-1)
-
-            print(x)
-            print(f"Flat.len:{len(x)}")
-            print(type(x))
-
-            # TODO dodaj info, o tym czyja teraz kolej b or w, ale najpierw niech dziala w podstawowym stanie
-
-            with open(dataset_path, "a") as output:
-                # print(len(fen_in_oned_matrix))
-                np.savetxt(output, [x], fmt="%f", delimiter=" ")
-
 
 def fen_matrix_into_one_row(matrix):
     flattened_matrix = matrix.flatten()
     return flattened_matrix
 
-
-def fen_matrix_into_one_row2(matrix):
-    # I am just assigning some random initial values
-    onerow_from_matrix = [99]
-    matrix_converted_into_one_line = [99]
-    indexx = 0
-
-    # Access each letter in matrix(and a matrix that is inside a matrix)
-    for bigmatrix in matrix:
-        indexx = indexx + 1
-        true1d = []
-        for smallmatrix in bigmatrix:
-            for letter in smallmatrix:
-                if (
-                    onerow_from_matrix[0] == 99
-                ):  # If this is first iteration then overwrite the first letter
-                    onerow_from_matrix[0] = int(letter)
-                onerow_from_matrix.append(int(letter))
-            if (
-                matrix_converted_into_one_line[0] == 99
-            ):  # If this is first iteration then overwrite the first letter
-                matrix_converted_into_one_line[0] = onerow_from_matrix
-
-            else:  # Otherwise append this to a list that will be returned
-                matrix_converted_into_one_line.append(onerow_from_matrix.copy())
-    for lists in matrix_converted_into_one_line:
-        true1d = true1d + lists
-    return true1d
 
 
 # for fenn in fen_for_testing:
@@ -156,14 +46,12 @@ def fen_matrix_into_one_row2(matrix):
 class AI:
     def __init__(self, depth) -> None:
         self.depth = depth  # depth = how deep should Min_max
-        print("class AI called")
 
     # TODO: load model while creating the app
     # for x in self.add_attack_info(fen):
     # 	print(x, "\n")
 
     def move(self, board: chess.Board) -> chess.Move:
-        print("move called")
         best_score = float('-inf')
         best_moves = []  # Store best moves
 
@@ -174,14 +62,14 @@ class AI:
             if score > best_score:
                 best_score = score
                 best_moves = [move]  # Reset with the new best move
-            elif score == best_score:
+            if score == best_score:  # Note: this is now an "if" clause, not "elif"
                 best_moves.append(move)  # Add the move
 
-        # Randomly select one of the best moves
-        best_move = random.choice(best_moves)
+            nn = neural_network()
+            best_move = nn.give_me_predictions(best_moves,board)
 
-        print(f"{best_move}")
-        print(type(best_move))
+            # best_move = random.choice(best_moves) # Randomly select one of the best moves
+
 
         return best_move
     def minimax(self, board, is_maximizing_player, depth):
@@ -195,7 +83,6 @@ class AI:
                 eval = self.minimax(board, False, depth - 1)
                 board.pop()  # undo the move
                 max_eval = max(max_eval, eval)
-                # print(f"max_eval{max_eval}")
             return max_eval
         else:
             min_eval = float('inf')
@@ -204,7 +91,6 @@ class AI:
                 eval = self.minimax(board, True, depth - 1)
                 board.pop()  # undo the move
                 min_eval = min(min_eval, eval)
-                # print(f"max_eval{min_eval}")
 
             return min_eval
 
@@ -223,11 +109,125 @@ class AI:
             9 * (chess.popcount(white & board.queens) - chess.popcount(black & board.queens))
         )
 
+    def fen_to_onehot(self,fen):
+        # print(f"FEN TO BE ONEHOTED:{fen}")
+
+        # Initialize an empty 8x8x12 array
+        board = np.zeros((8, 8, 12))
+
+        # Parse the FEN string
+        rows = fen.split("/")
+
+        # Iterate over the rows
+        for i in range(min(8, len(rows))):  # Only iterate over the first 8 rows
+            row = rows[i]
+
+            for j, char in enumerate(row):
+                # If its a digit its empty
+                if char.isdigit():
+                    # Go to empty squares
+                    j += int(char) - 1
+                else:
+                    if j < 8:
+                        # Get the one-hot vector for the piece
+                        piece_vector = PIECE_TO_VECTOR[char]
+                        # Set the corresponding values in the one-hot array
+                        board[i, j, :] = piece_vector
+        return board
+
+    def fen_matrix_into_one_row(self,matrix):
+        flattened_matrix = matrix.flatten()
+        return flattened_matrix
+
+    def csv_stockfish_into_input_data2(self,csv_stockfish_path, dataset_path):
+        i = 0
+        temp_str = ""
+        with open(csv_stockfish_path, "r") as file:
+            for line in file:
+                temp_str = line.strip() + " "  # clean useless symbols
+                temp_str = temp_str.split(
+                    " "
+                )  # split fen string from additional castling/pawn move data.
+
+                temp_str, color, castle, stockfish_eval = (
+                    self.fen_to_onehot(temp_str[0]),
+                    temp_str[1],
+                    temp_str[2],
+                    temp_str[6],
+                )
+                stockfish_eval = float(stockfish_eval)
+
+                fen_in_oned_matrix = fen_matrix_into_one_row(temp_str)
+
+                if color == "w":
+                    color_info = 0
+                else:
+                    color_info = 1
+                fen_in_oned_matrix = np.append(fen_in_oned_matrix, color_info)
+                fen_in_oned_matrix = np.append(fen_in_oned_matrix, stockfish_eval)
+
+                with open(dataset_path, "a") as output:
+                    # print(len(fen_in_oned_matrix))
+                    np.savetxt(output, [fen_in_oned_matrix], fmt="%f", delimiter=" ")
+
+    def csv_stockfish_into_input_data(self,
+        csv_stockfish_path, dataset_path, additional_features_enabled
+    ):
+
+        if additional_features_enabled:
+            pass
+        i = 0
+        temp_str = ""
+        stockfish_eval = [""]
+        with open(csv_stockfish_path, "r") as file:
+            for line in file:
+                temp_str = line.strip() + " "  # clean useless symbols
+                temp_str = temp_str.split(
+                    " "
+                )  # split fen string from additional castling/pawn move data.
+
+                temp_str, color, castle, stockfish_eval[0] = (
+                    self.fen_to_onehot(temp_str[0]),
+                    temp_str[1],
+                    temp_str[2],
+                    temp_str[6],
+                )
+                stockfish_eval = float(stockfish_eval[0])
+
+                fen_in_oned_matrix = fen_matrix_into_one_row(temp_str)
+                x = fen_in_oned_matrix
+                x = x.astype("float32")
+                # print(type(x[0]))
+                # print(x[0])
+                # print(len(x))
+
+                # Change into numpy array so it can be concatenated
+                stockfish_eval = np.array([stockfish_eval])
+
+                # Add a new axis to stockfish_eval to make it a 2D array
+                stockfish_eval = stockfish_eval[:, np.newaxis]
+
+                # Convert fen_in_oned_matrix to a 2D array
+                fen_in_oned_matrix = fen_in_oned_matrix[np.newaxis, :]
+
+                # Concatenate stockfish_eval with fen_in_oned_matrix
+                x = np.concatenate((fen_in_oned_matrix, stockfish_eval), axis=1)
+                x = x.reshape(-1)
+
+                print(x)
+                print(f"Flat.len:{len(x)}")
+                print(type(x))
+
+                # TODO dodaj info, o tym czyja teraz kolej b or w, ale najpierw niech dziala w podstawowym stanie
+
+                with open(dataset_path, "a") as output:
+                    # print(len(fen_in_oned_matrix))
+                    np.savetxt(output, [x], fmt="%f", delimiter=" ")
 
 
     def add_attack_info(self, fen_str):
         # Convert the FEN string to a one-hot encoded array
-        board = fen_to_onehot(fen_str)
+        board = self.fen_to_onehot(fen_str)
 
         # Initialize an empty 8x8x12 array for the attack information
         attack_info = np.zeros((8, 8, 12))
@@ -309,36 +309,6 @@ class AI:
 # csv_stockfish_into_input_data(PATH_TO_STOCKFISH_DATA, READY_DATASET, True)
 
 
-def csv_stockfish_into_input_data2(csv_stockfish_path, dataset_path):
-    i = 0
-    temp_str = ""
-    with open(csv_stockfish_path, "r") as file:
-        for line in file:
-            temp_str = line.strip() + " "  # clean useless symbols
-            temp_str = temp_str.split(
-                " "
-            )  # split fen string from additional castling/pawn move data.
-
-            temp_str, color, castle, stockfish_eval = (
-                fen_to_onehot(temp_str[0]),
-                temp_str[1],
-                temp_str[2],
-                temp_str[6],
-            )
-            stockfish_eval = float(stockfish_eval)
-
-            fen_in_oned_matrix = fen_matrix_into_one_row(temp_str)
-
-            if color == "w":
-                color_info = 0
-            else:
-                color_info = 1
-            fen_in_oned_matrix = np.append(fen_in_oned_matrix, color_info)
-            fen_in_oned_matrix = np.append(fen_in_oned_matrix, stockfish_eval)
-
-            with open(dataset_path, "a") as output:
-                # print(len(fen_in_oned_matrix))
-                np.savetxt(output, [fen_in_oned_matrix], fmt="%f", delimiter=" ")
 
 # chesboard_in_default_state = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 # chessboard_in_dangerous_state = chess.Board("rnbqkbnr/pppppppp/8/8/4p3/8/PPPP1PPP/RNBQKBNR w KQkq")
