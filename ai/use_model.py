@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import chess
 
-PATH = "D:/ML WSB Chess/ML-Chess/ai/"  # change this to dynamic path
+PATH = "./ai/"  # change this to dynamic path
 
 class neural_network():
 
