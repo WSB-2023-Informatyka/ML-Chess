@@ -32,11 +32,9 @@ fen_for_testing = [
 ]
 
 
-
 def fen_matrix_into_one_row(matrix):
     flattened_matrix = matrix.flatten()
     return flattened_matrix
-
 
 
 # for fenn in fen_for_testing:
@@ -44,8 +42,10 @@ def fen_matrix_into_one_row(matrix):
 
 
 class AI:
-    def __init__(self, depth) -> None:
+    def __init__(self, depth, alpha, beta) -> None:
         self.depth = depth  # depth = how deep should Min_max
+        self.alpha = alpha
+        self.beta = beta
 
     # TODO: load model while creating the app
     # for x in self.add_attack_info(fen):
@@ -58,7 +58,7 @@ class AI:
         for move in board.legal_moves:
             new_board = board.copy()
             new_board.push(move)
-            score = self.minimax(new_board, False, self.depth - 1)
+            score = self.minimax(new_board, False, self.depth, self.alpha, self.beta)
             if score < best_score:
                 best_score = score
                 best_moves = [move]  # Reset with the new best move
@@ -66,13 +66,13 @@ class AI:
                 best_moves.append(move)  # Add the move
 
         nn = neural_network()
-        best_move = nn.give_me_predictions(best_moves,board)
+        best_move = nn.give_me_predictions(best_moves, board)
 
-            # best_move = random.choice(best_moves) # Randomly select one of the best moves
-
+        # best_move = random.choice(best_moves) # Randomly select one of the best moves
 
         return best_move
-    def minimax(self, board, is_maximizing_player, depth):
+
+    def minimax(self, board, is_maximizing_player, depth, alpha, beta):
         if depth == 0 or board.is_game_over():
             return self.evaluate(board)
 
@@ -80,25 +80,31 @@ class AI:
             max_eval = float('-inf')
             for move in board.legal_moves:
                 board.push(move)
-                eval = self.minimax(board, False, depth - 1)
+                eval = self.minimax(board, False, depth - 1, alpha, beta)
                 board.pop()  # undo the move
                 max_eval = max(max_eval, eval)
+                alpha = max(alpha, max_eval)
+                if beta <= alpha:
+                    break
             return max_eval
         else:
             min_eval = float('inf')
             for move in board.legal_moves:
                 board.push(move)
-                eval = self.minimax(board, True, depth - 1)
+                eval = self.minimax(board, True, depth - 1, alpha, beta)
                 board.pop()  # undo the move
                 min_eval = min(min_eval, eval)
+                alpha = max(alpha, min_eval)
+                if beta <= alpha:
+                    break
 
             return min_eval
 
     def evaluate(self, board):
         return self.material_balance(board)
 
-# https://github.com/niklasf/python-chess/discussions/864
-    def material_balance(self,board):
+    # https://github.com/niklasf/python-chess/discussions/864
+    def material_balance(self, board):
         white = board.occupied_co[chess.WHITE]
         black = board.occupied_co[chess.BLACK]
         return (
@@ -106,11 +112,11 @@ class AI:
             3 * (chess.popcount(white & board.knights) - chess.popcount(black & board.knights)) +
             3 * (chess.popcount(white & board.bishops) - chess.popcount(black & board.bishops)) +
             5 * (chess.popcount(white & board.rooks) - chess.popcount(black & board.rooks)) +
-            9 * (chess.popcount(white & board.queens) - chess.popcount(black & board.queens)) # There might be an
+            9 * (chess.popcount(white & board.queens) - chess.popcount(black & board.queens))  # There might be an
             # issue with calculatiing queen value
         )
 
-    def fen_to_onehot(self,fen):
+    def fen_to_onehot(self, fen):
         # print(f"FEN TO BE ONEHOTED:{fen}")
 
         # Initialize an empty 8x8x12 array
@@ -136,11 +142,11 @@ class AI:
                         board[i, j, :] = piece_vector
         return board
 
-    def fen_matrix_into_one_row(self,matrix):
+    def fen_matrix_into_one_row(self, matrix):
         flattened_matrix = matrix.flatten()
         return flattened_matrix
 
-    def csv_stockfish_into_input_data2(self,csv_stockfish_path, dataset_path):
+    def csv_stockfish_into_input_data2(self, csv_stockfish_path, dataset_path):
         i = 0
         temp_str = ""
         with open(csv_stockfish_path, "r") as file:
@@ -172,8 +178,8 @@ class AI:
                     np.savetxt(output, [fen_in_oned_matrix], fmt="%f", delimiter=" ")
 
     def csv_stockfish_into_input_data(self,
-        csv_stockfish_path, dataset_path, additional_features_enabled
-    ):
+                                      csv_stockfish_path, dataset_path, additional_features_enabled
+                                      ):
 
         if additional_features_enabled:
             pass
@@ -224,7 +230,6 @@ class AI:
                 with open(dataset_path, "a") as output:
                     # print(len(fen_in_oned_matrix))
                     np.savetxt(output, [x], fmt="%f", delimiter=" ")
-
 
     def add_attack_info(self, fen_str):
         # Convert the FEN string to a one-hot encoded array
@@ -306,9 +311,7 @@ class AI:
 
         return new_board
 
-
 # csv_stockfish_into_input_data(PATH_TO_STOCKFISH_DATA, READY_DATASET, True)
-
 
 
 # chesboard_in_default_state = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
