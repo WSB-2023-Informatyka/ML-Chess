@@ -118,7 +118,10 @@ class AI:
 
     def fen_to_onehot(self, fen):
         # print(f"FEN TO BE ONEHOTED:{fen}")
-
+        # temp_str = fen.strip() + " "  # clean useless symbols
+        # temp_str = temp_str.strip() + "["  # clean useless symbols
+        # temp_str = temp_str.strip() + "]"  # clean useless symbols
+        # fen = temp_str
         # Initialize an empty 8x8x12 array
         board = np.zeros((8, 8, 12))
 
@@ -152,6 +155,8 @@ class AI:
         with open(csv_stockfish_path, "r") as file:
             for line in file:
                 temp_str = line.strip() + " "  # clean useless symbols
+                temp_str = line.strip() + "["  # clean useless symbols
+                temp_str = line.strip() + "]"  # clean useless symbols
                 temp_str = temp_str.split(
                     " "
                 )  # split fen string from additional castling/pawn move data.
