@@ -72,30 +72,50 @@ class AI:
 
         return best_move
 
-    def minimax(self, board, is_maximizing_player, depth, alpha, beta):
-        if depth == 0 or board.is_game_over():
+    def minimax(self, board, is_maximizing_player, depth, alpha, beta, current_depth=0):
+        print("PASS")
+        current_depth += 1
+        if current_depth > depth:
+            # If the current depth is greater than the specified depth,
+            # it means we have reached the end of the current search tree.
+            print(f"Tree finished{current_depth}")
             return self.evaluate(board)
 
+        if board.is_game_over():
+            # If the game is over, we can also return the evaluation of the board.
+            return self.evaluate(board)
+
+        x = 0
         if is_maximizing_player:
             max_eval = float('-inf')
             for move in board.legal_moves:
                 board.push(move)
-                eval = self.minimax(board, False, depth - 1, alpha, beta)
+                eval = self.minimax(board, False, depth, alpha, beta, current_depth)
                 board.pop()  # undo the move
+                x = x + 1
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, max_eval)
+                print(f"alpha:{alpha}")
                 if beta <= alpha:
+                    print(f"max{max_eval}alpha:{alpha}BREAK,Legal_moves:,")
                     break
+
+            # Optionally, you can include the current material balance on the board in the calculations.
+            # For example, you can add the following line:
+            # max_eval += self.material_balance(board)
+
             return max_eval
         else:
             min_eval = float('inf')
             for move in board.legal_moves:
                 board.push(move)
-                eval = self.minimax(board, True, depth - 1, alpha, beta)
+                eval = self.minimax(board, True, depth, alpha, beta, current_depth)
                 board.pop()  # undo the move
                 min_eval = min(min_eval, eval)
                 alpha = max(alpha, min_eval)
-                if beta <= alpha:
+                print(f"min:{min_eval}beta:{beta}")
+                if beta >= alpha:
+                    print(f"beta:{beta}BREAK,Legal_moves:")
                     break
 
             return min_eval

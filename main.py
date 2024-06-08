@@ -28,8 +28,8 @@ def main() -> None:
     # 	exit(1)
 
     ai = None
-    if args.ai:
-        ai = AI(7, -5, 5)
+    if args.ai:  # if True:
+        ai = AI(1, 5, -5)
 
     window_size = (640, 640)
 

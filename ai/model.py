@@ -1,9 +1,10 @@
 import numpy as np
 import tensorflow as tf
-
-DATA_PATH = "D:\\ML WSB Chess\\ML-Chess\\datasets\\dataset.csv"
+import os
+DATA_PATH = os.path.join(os.getcwd(), "dataset.csv")
+# DATA_PATH = "D:\\ML WSB Chess\\ML-Chess\\datasets\\dataset.csv"
 CHUNKSIZE = 769
-
+tf.config.run_functions_eagerly(True)
 
 class TrainingModel:
     def __init__(self, data_path, chunksize,activation_fun,l1,l2,p,l4):
