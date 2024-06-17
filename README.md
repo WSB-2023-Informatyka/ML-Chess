@@ -6,4 +6,4 @@ Założenia projektu
 |-------------------|---------------------|---------------------------------------|
 | Nikola Borska     | DevOps              | project management, tests, developer, |
 | Dawid Wykurz      | roles               | roles                                 |
-| Cezary Zdrojewski | roles               | roles                                 |
+| Cezary Zdrojewski | ML Engineer         | developer,techical writer,data analyst|
