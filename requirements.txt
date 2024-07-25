@@ -30,7 +30,7 @@ protobuf==4.25.3
 py2puml==0.9.1
 pygame==2.5.1
 Pygments==2.18.0
-pytest==7.4.3
+pytest==8.3.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
 requests==2.32.3
