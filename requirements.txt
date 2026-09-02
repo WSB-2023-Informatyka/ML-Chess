@@ -14,7 +14,7 @@ idna==3.7
 iniconfig==2.0.0
 keras==3.3.3
 libclang==18.1.1
-Markdown==3.6
+Markdown==3.8.1
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mdurl==0.1.2
