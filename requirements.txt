@@ -1,7 +1,7 @@
 absl-py==2.1.0
 astunparse==1.6.3
 certifi==2024.2.2
-charset-normalizer==3.3.2
+charset-normalizer==3.5.1
 chess==1.10.0
 colorama==0.4.6
 exceptiongroup==1.1.3
