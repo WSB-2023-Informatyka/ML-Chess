@@ -33,7 +33,7 @@ Pygments==2.18.0
 pytest==7.4.3
 python-dateutil==2.9.0.post0
 pytz==2024.1
-requests==2.32.3
+requests==2.33.0
 rich==13.7.1
 six==1.16.0
 tensorflow==2.11
